@@ -7,11 +7,16 @@ go:
   - 1.6
   - 1.7
   - 1.8
+  - 1.8.x
   - tip
 
 go_import_path: github.com/lionelbarrow/braintree-go
 
+install:
+  - if [[ "$TRAVIS_GO_VERSION" == "1.8"* ]]; then go get -u github.com/kisielk/errcheck; fi
+
 script:
   - source .default.env
   - go vet ./...
+  - if [[ "$TRAVIS_GO_VERSION" == "1.8"* ]]; then CGO_ENABLED=0 errcheck ./...; fi
   - go test -parallel 15 -v ./...
